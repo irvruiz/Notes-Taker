@@ -15,11 +15,11 @@
       integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link rel="stylesheet" href="./assets/css/notes.css" />
   </head>
 
   <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark">
       <a class="navbar-brand" href="/">Note Taker </a>
       <div class="icons">
         <i class="fas fa-save text-light save-note"></i>
@@ -28,22 +28,31 @@
     </nav>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-4 list-container">
+
+        <div class="col-4 list-container main-containers">
           <div class="card">
-            <ul class="list-group"></ul>
+            <p class= "saved-title">-- Saved Notes:</p>
+            <div class="note-div">
+              <ul class="list-group overflow-auto">
+              <!--insert saved notes here-->
+              </ul>
+            </div>
           </div>
         </div>
-        <div class="col-8">
-          <input
-            class="note-title"
-            placeholder="Note Title"
-            maxlength="28"
-            type="text"
-          />
-          <textarea class="note-textarea" placeholder="Note Text"></textarea>
+
+        <div class="col-8 main-containers">
+          <div class = "text-card">
+            <input
+              class="note-title"
+              placeholder="Note Title"
+              maxlength="28"
+              type="text"></input>
+            <input class="note-textarea" placeholder="Note Text"></input>
+          </div>
         </div>
+
       </div>
     </div>
-    <script src="/assets/js/index.js"></script>
+    <script src="assets/js/index.js"></script>
   </body>
 </html>
