@@ -1,45 +1,41 @@
-const {
-  readAndAppend,
-  writeToFile,
-  readFromFile,
-} = require("../helpers/fsUtils");
-const router = require("express").Router();
-const db = require("../db/db.json");
-const { v4: uuidv4 } = require("uuid");
-const path = require("path");
+const router = require('express').Router();
+const fs = require('fs');
+const path = require('path');
+var uniqid = require('uniqid');
+const db = require('../Develop/db/db.json');
+const { readFromFile, writeToFile, readAndAppend } = require('./helpers');
 
-router.get("/notes", (req, res) => {
-  const dbRoute = path.join(__dirname, "../db/db.json");
-  console.log(dbRoute);
-
-  readFromFile(dbRoute)
-    .then((data) => {
-      res.json(JSON.parse(data));
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+router.get('/api/notes', (req, res) => {
+  readFromFile('.Develop/db/db.json').then((data) =>
+    res.json(JSON.parse(data))
+  )
+  .catch((err) => console.log(err))
 });
-router.post("/notes", (req, res) => {
-  const dbRoute = path.join(__dirname, "../db/db.json");
 
-  const newNote = req.body;
-  newNote.id = uuidv4();
+router.post('/api/notes', (req, res) => {
+    const { title, text } = req.body;
 
-  readFromFile(JSON.stringify(dbRoute));
-  readAndAppend(newNote, dbRoute);
-  res.json(newNote);
-});
-router.delete("/notes/:id", (req, res) => {
-  const noteID = req.params.id;
-  const dbRoute = path.join(__dirname, "../db/db.json");
-  readFromFile(dbRoute)
-    .then((data) => JSON.parse(data))
-    .then((json) => {
-      const result = json.filter((note) => note.id !== noteID);
-      writeToFile(dbRoute, result);
-      res.json(`Item ${noteID} has been deleted`);
-    });
+        const newNote = {
+            title,
+            text,
+            id: uniqid(),
+        };
+       readAndAppend(newNote, '.Develop/db/db.json');
+       res.json(newNote);
+   
+  })
+
+router.delete("/api/notes/:id",  (req, res) => {
+  const { id } = req.params;
+  readFromFile('.Develop/db/db.json').then((notes) =>{
+      notes = JSON.parse(notes).filter(note => note.id != id);
+      console.log("filtered notes:\n", notes);
+      const finalNote = writeToFile('.Develop/db/db.json', notes); 
+      console.log("final note:\n", JSON.stringify(finalNote));
+      res.status(200).json(finalNote);
+  }
+)
+.catch((err) => console.log(err));
 });
 
 module.exports = router;
